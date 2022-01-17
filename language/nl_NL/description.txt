@@ -1,0 +1,1 @@
+Stel een vervaldatum in op foto's. Pas een automatische actie toe wanneer foto's verlopen.
