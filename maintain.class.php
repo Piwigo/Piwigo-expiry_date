@@ -57,9 +57,7 @@ class expiry_date_maintain extends PluginMaintain
       `send_date` DATETIME,
       `email_used` varchar(64),
       `email_uuid` varchar(10),
-      PRIMARY KEY (`id`),
-      FOREIGN KEY(image_id) REFERENCES '.IMAGES_TABLE.'(id),
-      FOREIGN KEY(user_id) REFERENCES '.USERS_TABLE.'(id)
+      PRIMARY KEY (`id`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8
     ;');
 
