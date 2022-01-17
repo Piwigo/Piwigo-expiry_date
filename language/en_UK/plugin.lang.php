@@ -22,12 +22,12 @@ $lang['You must select an album for archiving photos'] = 'You must select an alb
 $lang['Do nothing'] = 'Do nothing';
 $lang['Delete expired photos'] = 'Delete expired photos';
 $lang['Archive expired photos'] = 'Archive expired photos';
-$lang['No prenotification'] = 'No prenotification';
+$lang['No prenotification'] = 'No pre-notification';
 $lang['7 days before expiry'] = '7 days before expiry';
 $lang['14 days before expiry'] = '14 days before expiry';
 $lang['30 days before expiry'] = '30 days before expiry';
 $lang['Notify users before the expiry date'] = 'Notify users before the expiry date';
-$lang['A set number of days before a email will be sent'] = 'A set number of days before a email will be sent to notify that photos are expiring in the futur';
+$lang['A set number of days before a email will be sent'] = 'A set number of days before an email will be sent to notify that photos are expiring in the future';
 $lang['Notify admins of photo expiration'] = 'Notify admins of photo expiration';
 $lang['On the expiry date, an email will be sent to all admins'] = 'On the expiry date, an email will be sent to all admins';
 $lang['Notify admins before the expiry date'] = 'Notify admins before the expiry date';
@@ -47,5 +47,3 @@ $lang['These photo have reached their expiry date.'] = 'These photos have reache
 $lang['expires on'] = 'expires on';
 $lang['expired on'] = 'expired on';
 $lang['These photos will soon expire.'] = 'These photo will soon expire';
-
-?>
