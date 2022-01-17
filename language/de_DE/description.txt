@@ -1,0 +1,1 @@
+Legen Sie ein Verfallsdatum für Fotos fest. Wenden Sie eine automatische Aktion an, wenn Fotos ablaufen.
