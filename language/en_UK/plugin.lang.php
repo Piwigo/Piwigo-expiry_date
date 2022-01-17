@@ -39,7 +39,7 @@ $lang['Administrator notifications'] = 'Administrator notifications';
 //Notifications + Prenotifications
 $lang['Expiry date, action has been taken'] = 'Expiry date, action has been taken';
 $lang['These images have reached expiration: %s'] = 'These images have reached expiration: %s';
-$lang['Therefore these images have been archived in album # %s'] = 'Therefore these images have been archived in album # %s';
+$lang['Therefore these images have been archived in the album %s'] = 'Therefore these images have been archived in the album %s';
 $lang['No action was taken on these images'] = 'No action was taken on these images.';
 $lang['You have expiring photos'] = 'You have expiring photos';
 $lang['You have received this email because you previously downloaded these photos: %s'] = 'You have received this email because you previously downloaded these photos: %s';
