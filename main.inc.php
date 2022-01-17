@@ -239,15 +239,16 @@ SELECT
     
     //remove expiry date so action is not done again, add action applied on date
     $datas = array();
-
+    $count = 0;
     foreach ($image_ids as $image_id)
     {
       $datas[] = array(
         'id' => $image_id,
         'expiry_date' => null,
         'expd_action_applied_on' => $dbnow,
-        'expd_expired_on' => $image_['expiry_date'],
+        'expd_expired_on' => $images[$count]['expiry_date'],
         );
+      $count++;  
     }
 
     mass_updates(
@@ -307,7 +308,7 @@ SELECT
     array_push(
       $keyargs_content,
       array(
-        get_l10n_args("\nTherefore these images have been archived in album %s", $cat_fullname),
+        get_l10n_args("Therefore these images have been archived in the album %s", $cat_fullname),
         get_l10n_args("\n".$conf['expd_admin_email_content']),
         )
     );
