@@ -1,0 +1,1 @@
+Sett en utløpsdato på bilder. Bruk en automatisk handling når bilder går ut på dato. 
