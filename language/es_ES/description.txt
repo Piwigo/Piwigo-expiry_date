@@ -1,0 +1,1 @@
+Poner una fecha de caducidad a las fotos. Aplicar una acción automática cuando las fotos caducan.
