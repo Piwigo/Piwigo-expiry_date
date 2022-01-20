@@ -1,0 +1,1 @@
+Nastavte u fotografií datum expirace. Po vypršení platnosti fotografií na ně aplikujte automatickou akci.
