@@ -13,26 +13,26 @@ $lang['remove expiry date'] = 'supprimer la date d\'expiration';
 
 // config.tpl
 $lang['What should piwigo do once photos expire'] = 'Qu\'est ce que Piwigo doit faire quand les photos expirent ?';
-$lang['Where should Piwigo move archived photos'] = 'Où est ce que Piwigo doit déplacer les photos archivées';
+$lang['Where should Piwigo move archived photos'] = 'Où souhaitez-vous déplacer les photos archivées ?';
 $lang['Notify downloaders of photo expiration'] = 'Informez les utilisateurs ayant téléchargé la photo lors de son expiration';
 $lang['On the expiry date, an email will be sent to notify anyone who has downloaded the photo.'] = 'A la date d\'expiration, un e-mail sera envoyé à chaque personne ayant téléchargé la photo.';
 $lang['Piwigo knows if a user has downloaded the photo only if their visit history is saved.'] = 'Piwigo sait que l\'utilisateur a téléchargé la photo à condition que l\'historique des visites soit activé.';
 $lang['To change this setting go to:'] = 'Pour modifier ce paramètre, allez dans :';
 $lang['You must select an album for archiving photos'] = 'Vous devez sélectionner un album pour l\'archivage des photos';
 $lang['Do nothing'] = 'Ne rien faire';
-$lang['Delete expired photos'] = 'Supprimer les photos expirés';
-$lang['Archive expired photos'] = 'Archiver les photos expirés';
+$lang['Delete expired photos'] = 'Supprimer les photos expirées';
+$lang['Archive expired photos'] = 'Archiver les photos expirées';
 $lang['No prenotification'] = 'Pas de prénotification';
 $lang['7 days before expiry'] = '7 jours avant l\'expiration';
 $lang['14 days before expiry'] = '14 jours avant l\'expiration';
 $lang['30 days before expiry'] = '30 jours avant l\'expiration';
 $lang['Notify users before the expiry date'] = 'Informez les utilisateurs avant l\'expiration des photos';
-$lang['A set number of days before a email will be sent'] = 'Un nombre défini de jours avant un e-mail sera envoyé pour informer que les photos expirent dans le futur';
+$lang['A set number of days before a email will be sent'] = 'Créez une prénotification pour envoyer un email 7, 14 ou 30 jours avant la date d\'expiration';
 $lang['Notify admins of photo expiration'] = 'Informez les administrateurs lors de l\'expiration des photos';
 $lang['On the expiry date, an email will be sent to all admins'] = 'A la date d\'expiration, un email sera envoyé à tous les administrateurs';
 $lang['Notify admins before the expiry date'] = 'Informez les administrateurs avant l\'expiration des photos';
-$lang['Add additional content to email'] = 'Ajouter un contenu supplémentaire au mails';
-$lang['Action on expiration'] = 'Action lors de expiration';
+$lang['Add additional content to email'] = 'Ajoutez un contenu supplémentaire à l\'email de notification';
+$lang['Action on expiration'] = 'Action lors de l\'expiration';
 $lang['User notifications'] = 'Notifications utilisateurs';
 $lang['Administrator notifications'] = 'Notifications administrateurs';
 
