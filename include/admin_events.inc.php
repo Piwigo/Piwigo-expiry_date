@@ -78,7 +78,7 @@ function expd_get_batch_manager_prefilters($prefilters)
 }
 
 /**
- * Add prefilter to picture modify trigger
+ * Add prefilter to batch manager
  */
 function expd_loc_end_element_set_global()
 {
