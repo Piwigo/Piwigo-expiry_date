@@ -1,0 +1,1 @@
+Ställ in ett utgångsdatum för foton. Använd en automatisk åtgärd när foton går ut.
