@@ -1,0 +1,1 @@
+Imposta una data di scadenza sulle fotografie. Applica automaticamente un'azione alla scadenza delle fotografie.
