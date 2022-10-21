@@ -27,7 +27,7 @@ $lang['7 days before expiry'] = '7 days before expiry';
 $lang['14 days before expiry'] = '14 days before expiry';
 $lang['30 days before expiry'] = '30 days before expiry';
 $lang['Notify users before the expiry date'] = 'Notify users before the expiry date';
-$lang['A set number of days before a email will be sent'] = 'A set number of days before an email will be sent to notify that photos are expiring in the future';
+$lang['A set number of days before a email will be sent'] = 'Create a pre-notification to send an email 7, 14 or 30 days before the expiration date';
 $lang['Notify admins of photo expiration'] = 'Notify admins of photo expiration';
 $lang['On the expiry date, an email will be sent to all admins'] = 'On the expiry date, an email will be sent to all admins';
 $lang['Notify admins before the expiry date'] = 'Notify admins before the expiry date';
@@ -46,4 +46,4 @@ $lang['You have received this email because you previously downloaded these phot
 $lang['These photo have reached their expiry date.'] = 'These photos have reached their expiry date.';
 $lang['expires on'] = 'expires on';
 $lang['expired on'] = 'expired on';
-$lang['These photos will soon expire.'] = 'These photo will soon expire';
+$lang['These photos will soon expire.'] = 'These photos will expire soon';
