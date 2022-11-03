@@ -1,0 +1,1 @@
+Fotoğraflara bir son kullanma tarihi ayarlayın. Fotoğrafların süresi sona erdiğinde otomatik bir eylem uygulayın.
