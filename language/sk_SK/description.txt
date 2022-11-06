@@ -1,0 +1,1 @@
+Nastavte dátum vypršania platnosti fotografií. Použite automatickú akciu, keď vyprší ich platnosť.
