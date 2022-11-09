@@ -1,0 +1,1 @@
+Définissez une date d'expiration sur les photos. Appliquer une action automatique lorsque les photos expirent
