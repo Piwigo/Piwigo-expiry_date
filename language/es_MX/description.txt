@@ -1,0 +1,1 @@
+Establezca una fecha de vencimiento en las fotos. Aplique una acción automática cuando caduquen las fotos.
