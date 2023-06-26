@@ -1,0 +1,1 @@
+Ustaw datę wygaśnięcia zdjęć. Zastosuj automatyczne działanie w dniu wygaśnięcia zdjęć.
