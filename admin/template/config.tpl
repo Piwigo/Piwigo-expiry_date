@@ -43,7 +43,7 @@ function showDiv(divId, element){
 
 <div id="expd_config_page">
 
-  <form method="post" action="{$F_ACTION}">
+  <form method="post" >
 
     <div id="expd_options">
       <legend><span class="icon-clock icon-blue"></span>{'Action on expiration'|translate}</legend>

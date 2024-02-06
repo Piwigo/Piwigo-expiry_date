@@ -87,6 +87,7 @@ $template->assign(
 
 $template->assign(array(
   'CACHE_KEYS' => get_admin_client_cache_keys(array('categories')),
+  'PWG_TOKEN' => get_pwg_token(),
   ));
 
 

@@ -1,6 +1,7 @@
 <?php
 defined('PHPWG_ROOT_PATH') or die('Hacking attempt!');
 
+#[AllowDynamicProperties]
 class expiry_date_maintain extends PluginMaintain
 {
   private $default_conf = array(
