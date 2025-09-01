@@ -10,6 +10,7 @@ $lang['the past (already expired)'] = 'le passé (déjà expiré)';
 $lang['less than %s days'] ='Moins de %s jours';
 $lang['more than than %s days'] = 'Plus de %s jours';
 $lang['remove expiry date'] = 'supprimer la date d\'expiration';
+$lang['No Expiry date'] = 'Sans date d\'expiration';
 
 // config.tpl
 $lang['What should piwigo do once photos expire'] = 'Qu\'est ce que Piwigo doit faire quand les photos expirent ?';

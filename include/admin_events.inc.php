@@ -103,7 +103,8 @@ function expd_batch_manager_register_filters($filters)
 {
   if (isset($_POST['filter_prefilter_use']) and 'expiry_date' == $_POST['filter_prefilter'] and isset($_POST['filter_expd']))
   {
-    check_input_parameter('filter_expd', $_POST, false, PATTERN_ID);
+    check_input_parameter('filter_expd', $_POST, false, '/^(?:\d+|-1)$/
+');
 
     $filters['expiry_date_option'] = $_POST['filter_expd'];
   }
@@ -133,6 +134,14 @@ function expd_batch_manager_perform_filters($filter_sets)
       SELECT id 
         FROM '.IMAGES_TABLE.'
         WHERE expiry_date > ADDDATE(NOW(), INTERVAL 30 DAY)
+      ;';
+    }
+    else if (-1 == $_SESSION['bulk_manager_filter']['expiry_date_option'])
+    {
+      $query = '
+      SELECT id 
+        FROM '.IMAGES_TABLE.'
+        WHERE ISNULL(expiry_date)
       ;';
     }
     else
