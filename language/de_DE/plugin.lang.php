@@ -46,3 +46,4 @@ $lang['30 days before expiry'] = '30 Tage vor Ablauf der Gültigkeit';
 $lang['7 days before expiry'] = '7 Tage vor Ablauf der Gültigkeit';
 $lang['A set number of days before a email will be sent'] = 'Eine bestimmte Anzahl von Tagen, bevor eine E-Mail gesendet wird, um darauf hinzuweisen, dass die Fotos in Zukunft ablaufen werden';
 $lang['Action on expiration'] = 'Aktion zum Ablauf der Frist';
+$lang['No Expiry date'] = 'Kein Ablaufdatum';
