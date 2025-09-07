@@ -46,3 +46,4 @@ $lang['No prenotification'] = 'Engin fyrirfram tilkynning';
 $lang['Notify admins before the expiry date'] = 'Láttu stjórnendur vita fyrir fyrningardagsetningu';
 $lang['Notify admins of photo expiration'] = 'Látið stjórnendur vita að mynd rennur út';
 $lang['Notify downloaders of photo expiration'] = 'Látið niðurhalsaðila vita að mynd rennur út';
+$lang['No Expiry date'] = 'Enginn gildistími';
