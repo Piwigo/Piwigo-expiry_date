@@ -46,3 +46,4 @@ $lang['No prenotification'] = 'Ön bildirim yok';
 $lang['Notify admins before the expiry date'] = 'Sona erme tarihinden önce yöneticileri bilgilendirin';
 $lang['Notify admins of photo expiration'] = 'Yöneticileri fotoğraf süresinin sona ermesi konusunda bilgilendirin';
 $lang['Notify downloaders of photo expiration'] = 'İndirme yapanları fotoğraf süresinin sona ermesi konusunda bilgilendirin';
+$lang['No Expiry date'] = 'Son kullanma tarihi yok';
