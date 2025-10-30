@@ -46,3 +46,4 @@ $lang['Archive expired photos'] = '存档过期的照片';
 $lang['Delete expired photos'] = '删除过期的照片';
 $lang['Do nothing'] = '无操作';
 $lang['What should piwigo do once photos expire'] = '照片过期后，Piwigo应该怎么办？';
+$lang['No Expiry date'] = '无过期日期';
