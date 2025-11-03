@@ -46,3 +46,4 @@ $lang['No prenotification'] = 'Ingen før-notifikation';
 $lang['Notify admins before the expiry date'] = 'Giv administratorer besked før udløbsdatoen';
 $lang['Notify admins of photo expiration'] = 'Giv administratorer besked om fotografiudløb';
 $lang['Notify downloaders of photo expiration'] = 'Giv downloadere besked om fotografiudløb';
+$lang['No Expiry date'] = 'Ingen udløbsdato';
