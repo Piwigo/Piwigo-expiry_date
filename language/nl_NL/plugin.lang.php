@@ -46,3 +46,4 @@ $lang['No prenotification'] = 'Geen voormelding';
 $lang['Notify admins before the expiry date'] = 'Breng beheerders op de hoogte vóór de vervaldatum';
 $lang['Notify admins of photo expiration'] = 'Breng beheerders op de hoogte van het verlopen van foto\'s';
 $lang['Notify downloaders of photo expiration'] = 'Breng downloaders op de hoogte van het verlopen van foto\'s';
+$lang['No Expiry date'] = 'Geen vervaldatum';
