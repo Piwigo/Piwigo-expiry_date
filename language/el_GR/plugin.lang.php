@@ -46,3 +46,4 @@ $lang['You have received this email because you previously downloaded these phot
 $lang['You have expiring photos'] = 'Έχετε φωτογραφίες που λήγουν';
 $lang['Where should Piwigo move archived photos'] = 'Πού πρέπει να μετακινήσει το Piwigo τις αρχειοθετημένες φωτογραφίες;';
 $lang['What should piwigo do once photos expire'] = 'Τι πρέπει να κάνει το Piwigo όταν λήξουν οι φωτογραφίες;';
+$lang['No Expiry date'] = 'Χωρίς ημερομηνία λήξης';
