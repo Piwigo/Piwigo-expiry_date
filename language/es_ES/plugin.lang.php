@@ -46,3 +46,4 @@ $lang['less than %s days'] = 'Menos de %s días';
 $lang['more than than %s days'] = 'Más de %s días';
 $lang['remove expiry date'] = 'eliminar la fecha de caducidad';
 $lang['the past (already expired)'] = 'el pasado (ya ha caducado)';
+$lang['No Expiry date'] = 'Sin fecha de caducidad';
