@@ -36,13 +36,11 @@ function expd_loc_end_picture_modify()
 function expd_picture_modify_prefilter($content)
 {
   //search for save button in edit picture page 
-  $search = '<p>\s*<input type="hidden" name="pwg_token"';
+  $search = '<div class="savebar-footer">';
 
-  $replace = '{$EXPD_PICTURE_MODIFY_CONTENT}
-  <p>
-    <input type="hidden" name="pwg_token"';
+  $replace = '{$EXPD_PICTURE_MODIFY_CONTENT}';
 
-  return preg_replace('/'.$search.'/s', $replace, $content);
+  return preg_replace('/'.$search.'/s', $replace.$search, $content);
 }
 
 /**
