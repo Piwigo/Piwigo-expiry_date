@@ -165,6 +165,10 @@ SELECT id, file, name, author, expiry_date
   foreach ($images as $image)
   {
     $image_details.= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expired on")." ".format_date($image["expiry_date"])."\n";
+    if('delete' != $conf['expiry_date']['expd_action'])
+    {
+      $image_details.= get_absolute_root_url().'admin.php?page=photo-'.$image['id'];
+    }
   }
   $image_details .= "\n";
 
@@ -310,7 +314,7 @@ SELECT
       array(
         get_l10n_args("Therefore these images have been archived in the album %s", $cat_fullname),
         get_l10n_args("\n".$conf['expd_admin_email_content']),
-        )
+      )
     );
 
   }
