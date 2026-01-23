@@ -84,7 +84,7 @@ SELECT
     {
       continue;
     }
-    $url_admin =get_absolute_root_url().'admin.php?page=photo-'.$image_id;
+    $url_admin = get_absolute_root_url().'admin.php?page=photo-'.$image_id;
 
     $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expires on")." ".format_date($image["expiry_date"])."\n ".$url_admin."\n\n";
 
@@ -251,14 +251,14 @@ SELECT
       {
         continue;
       }
-      $url_admin =get_absolute_root_url().'admin.php?page=photo-'.$user_image_id;
+      $url_gallery = get_absolute_root_url().'picture.php?/'.$user_image_id;
       foreach ($images as $image)
       {
         if ($user_image_id != $image["id"])
         {
           continue;
         }
-        $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expires on")." ".format_date($image["expiry_date"])."\n ".$url_admin."\n\n";
+        $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expires on")." ".format_date($image["expiry_date"])."\n ".$url_gallery."\n\n";
          
         $notification_history[] = array(
           'type' => 'prenotification_user_'.$conf['expiry_date']['expd_notify_before_option'],
