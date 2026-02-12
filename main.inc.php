@@ -170,7 +170,7 @@ SELECT id, file, name, author, expiry_date
       $image_details.= get_absolute_root_url().'admin.php?page=photo-'.$image['id'];
     }
   }
-  $image_details .= "\n";
+  $image_details .= "\n\n";
 
   // Action taken on expiring images
   list($dbnow) = pwg_db_fetch_row(pwg_query('SELECT NOW();'));
