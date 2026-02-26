@@ -223,8 +223,7 @@ SELECT
 
     array_push(
       $keyargs_content, array(
-        get_l10n_args("\nTherefore these images have been deleted."),
-        get_l10n_args("\n".$conf['expd_admin_email_content']),
+        get_l10n_args("\nTherefore these images have been deleted.")
       )
     );
 
@@ -313,8 +312,7 @@ SELECT
     array_push(
       $keyargs_content,
       array(
-        get_l10n_args("Therefore these images have been archived in the album %s", $cat_fullname),
-        get_l10n_args("\n".$conf['expd_admin_email_content']),
+        get_l10n_args("Therefore these images have been archived in the album %s", $cat_fullname)
       )
     );
 
@@ -346,8 +344,7 @@ SELECT
     array_push(
       $keyargs_content,
       array(
-        get_l10n_args("No action was taken on these images"),
-        get_l10n_args("\n".$conf['expd_admin_email_content']),
+        get_l10n_args("No action was taken on these images")
       )
     );
 
