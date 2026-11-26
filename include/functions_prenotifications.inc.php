@@ -9,7 +9,7 @@ include_once(PHPWG_ROOT_PATH.'admin/include/functions.php');
  */
 function send_prenotifications_admin()
 {
-  global $conf, $user;
+  global $conf;
 
   // Check if either admin prenotification is set
   if ('none' == $conf['expiry_date']['expd_notify_admin_before_option'])
@@ -20,11 +20,7 @@ function send_prenotifications_admin()
   // select all images expiring in X days for admin prenotif
   $query = '
 SELECT
-    id,
-    file,
-    name,
-    author,
-    expiry_date
+    '.expd_get_mail_image_columns().'
   FROM '.IMAGES_TABLE.'
   WHERE expiry_date BETWEEN ADDDATE(NOW(), INTERVAL 2 DAY) AND ADDDATE(NOW(), INTERVAL '.$conf['expiry_date']['expd_notify_admin_before_option'] . ' DAY)
 ;';
@@ -74,8 +70,7 @@ SELECT
 
   $notifications_sent = query2array($query, 'image_id');
   $notification_history = array();
-
-  $image_info = "\n\n";
+  $mail_images = array();
 
   switch_lang_to(get_default_language());
   foreach ($images as $image_id => $image)
@@ -84,9 +79,9 @@ SELECT
     {
       continue;
     }
-    $url_admin = get_absolute_root_url().'admin.php?page=photo-'.$image_id;
 
-    $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expires on")." ".format_date($image["expiry_date"])."\n ".$url_admin."\n\n";
+    // before expiry, the photo is still in its albums and its file exists
+    $mail_images[] = expd_get_mail_image($image, l10n('expires on'), 'admin', true);
 
     // only admins with an email address get notified
     foreach ($admin_emails as $admin_id => $admin_email)
@@ -102,24 +97,16 @@ SELECT
     }
   }
 
-  if (count($notification_history) > 0)
+  if (count($mail_images) > 0)
   {
-    // notify admins on expiration
-    $current_user_id = $user['id'];
-    $user['id'] = -1; // make sure even the current user will get notified. Fake current user.
-
-    $subject =l10n('Expiry date').", ".l10n('These photos will soon expire.');
-    $keyargs_content = array(
-      get_l10n_args("These photos will soon expire."),
-      get_l10n_args("%s",$image_info),
-      get_l10n_args($conf['expd_admin_email_content']),
+    expd_send_admin_mail(
+      l10n('Expiry date').', '.l10n('These photos will soon expire.'),
+      $mail_images,
+      l10n('These photos will soon expire.'),
+      '',
+      $conf['expd_admin_email_content']
     );
-
-    pwg_mail_notification_admins($subject, $keyargs_content, false);
     expd_add_notification_history($notification_history);
-
-    // unfake current user
-    $user['id'] = $current_user_id;
   }
   switch_lang_back();
 }
@@ -256,7 +243,7 @@ SELECT
         }
 
         // before expiry, the photo is still in its albums and its file exists
-        $mail_images[] = expd_get_mail_image($image, l10n('expires on'), true, true);
+        $mail_images[] = expd_get_mail_image($image, l10n('expires on'), 'gallery', true);
 
         $notification_history[] = array(
           'type' => 'prenotification_user_'.$conf['expiry_date']['expd_notify_before_option'],

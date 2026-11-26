@@ -66,7 +66,7 @@ function expd_single_exec_end($token_name, $exec_id)
 }
 
 /**
- * Columns of IMAGES_TABLE needed to describe a photo in a user email
+ * Columns of IMAGES_TABLE needed to describe a photo in a notification email
  * (path, representative_ext, width, height and rotation are needed by
  * DerivativeImage to build the thumbnail URL)
  */
@@ -76,15 +76,16 @@ function expd_get_mail_image_columns()
 }
 
 /**
- * Prepare the data of a photo for the user email template
+ * Prepare the data of a photo for the email template
  *
  * @param array $image row of IMAGES_TABLE, see expd_get_mail_image_columns()
  * @param string $date_label "expires on" or "expired on", already translated
- * @param bool $add_link only if the photo is still visible in the gallery
+ * @param string|null $link_to 'gallery' (only if the photo is still visible
+ *   in the gallery), 'admin' (only if the photo still exists) or null for no link
  * @param bool $add_thumbnail only if the photo file still exists
  * @return array
  */
-function expd_get_mail_image($image, $date_label, $add_link, $add_thumbnail)
+function expd_get_mail_image($image, $date_label, $link_to, $add_thumbnail)
 {
   global $conf;
 
@@ -98,7 +99,7 @@ function expd_get_mail_image($image, $date_label, $add_link, $add_thumbnail)
   // we are building URLs for an email: they must be absolute
   set_make_full_url();
 
-  if ($add_link)
+  if ('gallery' == $link_to)
   {
     $mail_image['URL'] = make_picture_url(
       array(
@@ -106,6 +107,10 @@ function expd_get_mail_image($image, $date_label, $add_link, $add_thumbnail)
         'image_file' => $image['file'],
       )
     );
+  }
+  elseif ('admin' == $link_to)
+  {
+    $mail_image['URL'] = get_root_url().'admin.php?page=photo-'.$image['id'];
   }
 
   if ($add_thumbnail)
@@ -127,8 +132,31 @@ function expd_get_mail_image($image, $date_label, $add_link, $add_thumbnail)
 }
 
 /**
- * Send a notification email to a user about expiring/expired photos, in
- * HTML (with thumbnails) and plain text.
+ * Template parameter of pwg_mail() for notification emails (HTML with
+ * thumbnails + plain text), used for both users and admins.
+ *
+ * @param string $intro paragraph before the list of photos, translated
+ * @param array $mail_images list of expd_get_mail_image() results
+ * @param string $status_message paragraph after the list of photos, translated
+ * @param string $custom_content free text set in the plugin configuration
+ * @return array
+ */
+function expd_get_mail_tpl($intro, $mail_images, $status_message, $custom_content)
+{
+  return array(
+    'dirname' => realpath(EXPIRY_DATE_PATH.'template/mail'),
+    'filename' => 'expd_notification',
+    'assign' => array(
+      'EXPD_INTRO' => $intro,
+      'EXPD_IMAGES' => $mail_images,
+      'EXPD_STATUS' => $status_message,
+      'EXPD_CUSTOM_CONTENT' => $custom_content,
+    ),
+  );
+}
+
+/**
+ * Send a notification email to a user about expiring/expired photos.
  *
  * Must be called after switch_lang_to() the user language.
  *
@@ -159,15 +187,34 @@ function expd_send_user_mail($email, $subject, $mail_images, $status_message)
       'mail_subtitle' => $subject,
       'content_format' => 'text/html',
     ),
+    expd_get_mail_tpl($intro, $mail_images, $status_message, $custom_content)
+  );
+}
+
+/**
+ * Send a notification email to all admins (including the current user, if
+ * admin) about expiring/expired photos.
+ *
+ * Must be called after switch_lang_to() the default language.
+ *
+ * @param string $subject
+ * @param array $mail_images list of expd_get_mail_image() results
+ * @param string $intro paragraph before the list of photos, translated
+ * @param string $status_message paragraph after the list of photos, translated
+ * @param string $custom_content free text set in the plugin configuration
+ */
+function expd_send_admin_mail($subject, $mail_images, $intro, $status_message, $custom_content)
+{
+  global $conf;
+
+  return pwg_mail_admins(
     array(
-      'dirname' => realpath(EXPIRY_DATE_PATH.'template/mail'),
-      'filename' => 'expd_user_notification',
-      'assign' => array(
-        'EXPD_INTRO' => $intro,
-        'EXPD_IMAGES' => $mail_images,
-        'EXPD_STATUS' => $status_message,
-        'EXPD_CUSTOM_CONTENT' => $custom_content,
-      ),
-    )
+      'subject' => '['.$conf['gallery_title'].'] '.$subject,
+      'mail_title' => $conf['gallery_title'],
+      'mail_subtitle' => $subject,
+      'content_format' => 'text/html',
+    ),
+    expd_get_mail_tpl($intro, $mail_images, $status_message, $custom_content),
+    false // exclude_current_user: the check runs on any page visit, the visitor may be an admin
   );
 }

@@ -159,34 +159,19 @@ SELECT '.expd_get_mail_image_columns().'
     return;
   }
 
-  switch_lang_to(get_default_language());
-
-  $image_details = "\n\n";
-  foreach ($images as $image)
-  {
-    $image_details.= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expired on")." ".format_date($image["expiry_date"])."\n";
-    if('delete' != $conf['expiry_date']['expd_action'])
-    {
-      $image_details.= get_absolute_root_url().'admin.php?page=photo-'.$image['id'];
-    }
-    $image_details .= "\n";
-  }
-  $image_details .= "\n\n";
-
   // Action taken on expiring images
   list($dbnow) = pwg_db_fetch_row(pwg_query('SELECT NOW();'));
 
-  // what can we show users once the action is applied?
-  // - link: only if photos are still visible in the gallery (no action)
-  // - thumbnail: only if photo files still exist (no action, archive)
+  // what can we show in emails once the action is applied?
+  // - users: link only if photos are still visible in the gallery (no
+  //   action), thumbnail only if photo files still exist (no action, archive)
+  // - admins: link and thumbnail as long as photos are not deleted
   $user_mail_add_link = false;
   $user_mail_add_thumbnail = false;
+  $admin_mail_add_link_and_thumbnail = false;
 
-  //set email content to notify admins expiration action has taken place
-  $subject = get_l10n_args("Expiry date, action has been taken");
-  $keyargs_content = array(
-    get_l10n_args("These images have reached expiration: %s", $image_details),
-  );
+  // action taken on photos, for the admin email
+  $admin_mail_status = null;
 
   if ('delete' == $conf['expiry_date']['expd_action'])
   {
@@ -227,11 +212,7 @@ SELECT
       );
     }
 
-    array_push(
-      $keyargs_content, array(
-        get_l10n_args("\nTherefore these images have been deleted.")
-      )
-    );
+    $admin_mail_status = get_l10n_args("\nTherefore these images have been deleted.");
 
   }
   else if ('archive' == $conf['expiry_date']['expd_action'] and isset($conf['expiry_date']['expd_archive_album']) )
@@ -250,6 +231,7 @@ SELECT
     // the archive album is usually not visible to users, but the files are
     // still there and i.php does not check permissions
     $user_mail_add_thumbnail = true;
+    $admin_mail_add_link_and_thumbnail = true;
     
     //remove expiry date so action is not done again, add action applied on date
     $datas = array();
@@ -319,12 +301,7 @@ SELECT
       );
     }
 
-    array_push(
-      $keyargs_content,
-      array(
-        get_l10n_args("Therefore these images have been archived in the album %s", $cat_fullname)
-      )
-    );
+    $admin_mail_status = get_l10n_args("Therefore these images have been archived in the album %s", $cat_fullname);
 
   }
   else
@@ -345,6 +322,7 @@ SELECT
     // no action taken, photos are still in their albums
     $user_mail_add_link = true;
     $user_mail_add_thumbnail = true;
+    $admin_mail_add_link_and_thumbnail = true;
 
     mass_updates(
       IMAGES_TABLE,
@@ -355,20 +333,13 @@ SELECT
       $datas
     );
 
-    array_push(
-      $keyargs_content,
-      array(
-        get_l10n_args("No action was taken on these images")
-      )
-    );
+    $admin_mail_status = get_l10n_args("No action was taken on these images");
 
   }
 
-  switch_lang_back();
-
   if (isset($conf['expiry_date']['expd_notify']))
   {
-    notify_admins($images, $subject, $keyargs_content );
+    notify_admins($images, $admin_mail_status, $admin_mail_add_link_and_thumbnail, $admin_mail_add_link_and_thumbnail);
   }
   
   if (isset($conf['expiry_date']['expd_notify']))

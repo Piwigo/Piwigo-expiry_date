@@ -1,4 +1,6 @@
+{if !empty($EXPD_INTRO)}
 <p>{$EXPD_INTRO}</p>
+{/if}
 
 {foreach from=$EXPD_IMAGES item=expd_image}
 <table style="margin:15px 0;border-collapse:collapse;">
@@ -20,7 +22,9 @@
 </table>
 {/foreach}
 
+{if !empty($EXPD_STATUS)}
 <p>{$EXPD_STATUS}</p>
+{/if}
 {if !empty($EXPD_CUSTOM_CONTENT)}
 
 <p>{$EXPD_CUSTOM_CONTENT|escape|nl2br}</p>

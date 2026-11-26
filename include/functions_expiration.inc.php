@@ -6,10 +6,17 @@ include_once(EXPIRY_DATE_PATH.'include/functions.inc.php');
 
 /**
  * Notify admins of image expiration
+ *
+ * @param array $images rows of IMAGES_TABLE, see expd_get_mail_image_columns()
+ * @param array $status_keyargs get_l10n_args() of the action taken on photos
+ * @param bool $add_link add a link to the admin page of each photo (only
+ *   makes sense if the photo was not deleted)
+ * @param bool $add_thumbnail add a thumbnail of each photo (only makes sense
+ *   if the photo file was not deleted)
  */
-function notify_admins($images, $subject, $keyargs_content )
+function notify_admins($images, $status_keyargs, $add_link=false, $add_thumbnail=false)
 {
-  global $conf, $user;
+  global $conf;
 
   if (!isset($conf['expiry_date']['expd_notify_admin']))
   {
@@ -50,11 +57,14 @@ SELECT
   $email_uuid = generate_key(10);
 
   $notification_history = array();
+  $mail_images = array();
 
   switch_lang_to(get_default_language());
 
   foreach ($images as $image_id => $image)
   {
+    $mail_images[] = expd_get_mail_image($image, l10n('expired on'), $add_link ? 'admin' : null, $add_thumbnail);
+
     // only admins with an email address get notified
     foreach ($admin_emails as $admin_id => $admin_email)
     {
@@ -71,14 +81,18 @@ SELECT
 
   if (count($notification_history) > 0)
   {
-    // notify admins on expiration
-    $current_user_id = $user['id'];
-    $user['id'] = -1; // make sure even the current user will get notified
+    // the existing translation includes a "%s" for the list of photos, we
+    // reuse it without the list to avoid requiring a new translation
+    $intro = rtrim(l10n('These images have reached expiration: %s', ''));
 
-    pwg_mail_notification_admins($subject, $keyargs_content, false);
+    expd_send_admin_mail(
+      l10n('Expiry date, action has been taken'),
+      $mail_images,
+      $intro,
+      trim(l10n_args($status_keyargs)),
+      ''
+    );
     expd_add_notification_history($notification_history);
-
-    $user['id'] = $current_user_id;
   }
   switch_lang_back();
 
@@ -182,7 +196,7 @@ SELECT
         {
           continue;
         }
-        $mail_images[] = expd_get_mail_image($image, l10n('expired on'), $add_link, $add_thumbnail);
+        $mail_images[] = expd_get_mail_image($image, l10n('expired on'), $add_link ? 'gallery' : null, $add_thumbnail);
 
         $notification_history[] = array(
           'type' => 'expiration_notification_user',
