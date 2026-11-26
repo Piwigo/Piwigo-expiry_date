@@ -121,7 +121,9 @@ function expd_get_mail_image($image, $date_label, $link_to, $add_thumbnail)
     $previous_derivative_url_style = $conf['derivative_url_style'];
     $conf['derivative_url_style'] = 2;
 
-    $mail_image['THUMB_URL'] = DerivativeImage::thumb_url($image);
+    // square size: always enabled and same width for all photos, so that
+    // texts are aligned in the email
+    $mail_image['THUMB_URL'] = DerivativeImage::url(IMG_SQUARE, $image);
 
     $conf['derivative_url_style'] = $previous_derivative_url_style;
   }
