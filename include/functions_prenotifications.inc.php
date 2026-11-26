@@ -142,11 +142,7 @@ function send_prenotifications_user()
   // select all images expiring in X days for user prenotif
   $query = '
 SELECT
-    id,
-    file,
-    name,
-    author,
-    expiry_date
+    '.expd_get_mail_image_columns().'
   FROM '.IMAGES_TABLE.'
   WHERE expiry_date BETWEEN ADDDATE(NOW(), INTERVAL 2 DAY) AND ADDDATE(NOW(), INTERVAL '.$conf['expiry_date']['expd_notify_before_option'].' DAY);
 ;';
@@ -244,8 +240,7 @@ SELECT
 
     switch_lang_to($recipient_language);
 
-    $image_info = "\n\n";
-    $nb_images_for_user = 0;
+    $mail_images = array();
     foreach (array_keys($user_image_ids) as $user_image_id)
     {
       if (isset($notifications_sent[$user_image_id.'_'.$user_id]))
@@ -259,17 +254,8 @@ SELECT
           continue;
         }
 
-        set_make_full_url();
-        $url_gallery = make_picture_url(
-          array(
-            'image_id' => $image['id'],
-            'image_file' => $image['file'],
-          )
-        );
-        unset_make_full_url();
-
-        $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expires on")." ".format_date($image["expiry_date"])."\n ".$url_gallery."\n\n";
-        $nb_images_for_user++;
+        // before expiry, the photo is still in its albums and its file exists
+        $mail_images[] = expd_get_mail_image($image, l10n('expires on'), true, true);
 
         $notification_history[] = array(
           'type' => 'prenotification_user_'.$conf['expiry_date']['expd_notify_before_option'],
@@ -283,26 +269,15 @@ SELECT
     }
 
     // $notification_history is shared by all users: without this per-user
-    // counter, a user whose photos were all already prenotified would receive
+    // list, a user whose photos were all already prenotified would receive
     // an email with an empty list as soon as a previous user had photos
-    if ($nb_images_for_user > 0)
+    if (count($mail_images) > 0)
     {
-      $keyargs_content = array(
-        get_l10n_args("You have received this email because you previously downloaded these photos: %s", $image_info),
-        get_l10n_args("These photos will soon expire."),
-        get_l10n_args("\n".$conf['expd_email_content']),
-      );
-
-      $subject =l10n('Expiry date').", ".l10n('These photos will soon expire.');
-      $content = l10n_args($keyargs_content);
-      
-      pwg_mail(
+      expd_send_user_mail(
         $email_of_user[$user_id],
-        array(
-          'subject' => $subject,
-          'content' => $content,
-          'content_format' => 'text/plain',
-        )
+        l10n('Expiry date').', '.l10n('These photos will soon expire.'),
+        $mail_images,
+        l10n('These photos will soon expire.')
       );
     }
     switch_lang_back();

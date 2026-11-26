@@ -137,7 +137,7 @@ SELECT id, file
 
   //Select all images with an expiry date before now (=expired)
     $query = '
-SELECT id, file, name, author, expiry_date
+SELECT '.expd_get_mail_image_columns().'
   FROM '.IMAGES_TABLE.'
   WHERE id IN ('.implode(',', array_keys($expiry_date_images)).')
     AND expiry_date <= NOW()
@@ -176,8 +176,11 @@ SELECT id, file, name, author, expiry_date
   // Action taken on expiring images
   list($dbnow) = pwg_db_fetch_row(pwg_query('SELECT NOW();'));
 
-  // will photos still be visible in the gallery once the action is applied?
-  $photos_still_reachable = false;
+  // what can we show users once the action is applied?
+  // - link: only if photos are still visible in the gallery (no action)
+  // - thumbnail: only if photo files still exist (no action, archive)
+  $user_mail_add_link = false;
+  $user_mail_add_thumbnail = false;
 
   //set email content to notify admins expiration action has taken place
   $subject = get_l10n_args("Expiry date, action has been taken");
@@ -243,6 +246,10 @@ SELECT
 
     //Move expired images
     move_images_to_categories($image_ids, array($conf['expiry_date']['expd_archive_album']));
+
+    // the archive album is usually not visible to users, but the files are
+    // still there and i.php does not check permissions
+    $user_mail_add_thumbnail = true;
     
     //remove expiry date so action is not done again, add action applied on date
     $datas = array();
@@ -335,8 +342,9 @@ SELECT
         );
     }
 
-    // no action taken, photos are still in their albums: users can be given a link
-    $photos_still_reachable = true;
+    // no action taken, photos are still in their albums
+    $user_mail_add_link = true;
+    $user_mail_add_thumbnail = true;
 
     mass_updates(
       IMAGES_TABLE,
@@ -365,7 +373,7 @@ SELECT
   
   if (isset($conf['expiry_date']['expd_notify']))
   {
-    notify_users($images, $image_ids, $photos_still_reachable);
+    notify_users($images, $image_ids, $user_mail_add_link, $user_mail_add_thumbnail);
   }
 }
 

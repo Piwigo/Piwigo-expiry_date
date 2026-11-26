@@ -60,7 +60,114 @@ INSERT IGNORE
 function expd_single_exec_end($token_name, $exec_id)
 {
   global $logger;
-  
+
   conf_delete_param($token_name);
   $logger->debug(__FUNCTION__.', token_name='.$token_name.', exec='.$exec_id.' releases the token');
+}
+
+/**
+ * Columns of IMAGES_TABLE needed to describe a photo in a user email
+ * (path, representative_ext, width, height and rotation are needed by
+ * DerivativeImage to build the thumbnail URL)
+ */
+function expd_get_mail_image_columns()
+{
+  return 'id, file, name, author, expiry_date, path, representative_ext, width, height, rotation';
+}
+
+/**
+ * Prepare the data of a photo for the user email template
+ *
+ * @param array $image row of IMAGES_TABLE, see expd_get_mail_image_columns()
+ * @param string $date_label "expires on" or "expired on", already translated
+ * @param bool $add_link only if the photo is still visible in the gallery
+ * @param bool $add_thumbnail only if the photo file still exists
+ * @return array
+ */
+function expd_get_mail_image($image, $date_label, $add_link, $add_thumbnail)
+{
+  global $conf;
+
+  $mail_image = array(
+    'NAME' => render_element_name($image),
+    'AUTHOR' => $image['author'],
+    'FILE' => $image['file'],
+    'DATE' => $date_label.' '.format_date($image['expiry_date']),
+  );
+
+  // we are building URLs for an email: they must be absolute
+  set_make_full_url();
+
+  if ($add_link)
+  {
+    $mail_image['URL'] = make_picture_url(
+      array(
+        'image_id' => $image['id'],
+        'image_file' => $image['file'],
+      )
+    );
+  }
+
+  if ($add_thumbnail)
+  {
+    // force $conf['derivative_url_style'] to 2 (script) to make sure we use
+    // i.php?/upload and not _data/i/upload, because the derivative cache may
+    // be flushed before the email is read
+    $previous_derivative_url_style = $conf['derivative_url_style'];
+    $conf['derivative_url_style'] = 2;
+
+    $mail_image['THUMB_URL'] = DerivativeImage::thumb_url($image);
+
+    $conf['derivative_url_style'] = $previous_derivative_url_style;
+  }
+
+  unset_make_full_url();
+
+  return $mail_image;
+}
+
+/**
+ * Send a notification email to a user about expiring/expired photos, in
+ * HTML (with thumbnails) and plain text.
+ *
+ * Must be called after switch_lang_to() the user language.
+ *
+ * @param string $email
+ * @param string $subject
+ * @param array $mail_images list of expd_get_mail_image() results
+ * @param string $status_message "These photos will soon expire." or equivalent, translated
+ */
+function expd_send_user_mail($email, $subject, $mail_images, $status_message)
+{
+  global $conf;
+
+  // the existing translation includes a "%s" for the list of photos, we
+  // reuse it without the list to avoid requiring a new translation
+  $intro = rtrim(l10n('You have received this email because you previously downloaded these photos: %s', ''));
+
+  $custom_content = '';
+  if (!empty($conf['expd_email_content']))
+  {
+    $custom_content = $conf['expd_email_content'];
+  }
+
+  return pwg_mail(
+    $email,
+    array(
+      'subject' => $subject,
+      'mail_title' => $conf['gallery_title'],
+      'mail_subtitle' => $subject,
+      'content_format' => 'text/html',
+    ),
+    array(
+      'dirname' => realpath(EXPIRY_DATE_PATH.'template/mail'),
+      'filename' => 'expd_user_notification',
+      'assign' => array(
+        'EXPD_INTRO' => $intro,
+        'EXPD_IMAGES' => $mail_images,
+        'EXPD_STATUS' => $status_message,
+        'EXPD_CUSTOM_CONTENT' => $custom_content,
+      ),
+    )
+  );
 }

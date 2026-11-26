@@ -86,12 +86,14 @@ SELECT
 /**
  * Notify users of photo expiration
  *
- * @param array $images
+ * @param array $images rows of IMAGES_TABLE, see expd_get_mail_image_columns()
  * @param int[] $image_ids
  * @param bool $add_link add a link to each photo in the gallery (only makes
  *   sense if the photo was neither deleted nor archived)
+ * @param bool $add_thumbnail add a thumbnail of each photo (only makes sense
+ *   if the photo file was not deleted)
  */
-function notify_users($images, $image_ids, $add_link=false)
+function notify_users($images, $image_ids, $add_link=false, $add_thumbnail=false)
 {
   global $conf, $user;
   
@@ -170,8 +172,7 @@ SELECT
 
     switch_lang_to($recipient_language);
 
-    $image_info = "\n\n";
-    $nb_images_for_user = 0;
+    $mail_images = array();
     foreach (array_keys($user_image_ids) as $user_image_id)
     {
       foreach ($images as $image)
@@ -180,22 +181,7 @@ SELECT
         {
           continue;
         }
-        $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expired on")." ".format_date($image["expiry_date"])."\n";
-        if ($add_link)
-        {
-          set_make_full_url();
-          $url_gallery = make_picture_url(
-            array(
-              'image_id' => $image['id'],
-              'image_file' => $image['file'],
-            )
-          );
-          unset_make_full_url();
-
-          $image_info .= ' '.$url_gallery."\n";
-        }
-        $image_info .= "\n";
-        $nb_images_for_user++;
+        $mail_images[] = expd_get_mail_image($image, l10n('expired on'), $add_link, $add_thumbnail);
 
         $notification_history[] = array(
           'type' => 'expiration_notification_user',
@@ -210,24 +196,13 @@ SELECT
     }
 
     // $notification_history is shared by all users, check this user has photos
-    if ($nb_images_for_user > 0)
+    if (count($mail_images) > 0)
     {
-      $keyargs_content = array(
-        get_l10n_args("You have received this email because you previously downloaded these photos: %s", $image_info),
-        get_l10n_args("These photo have reached their expiry date."),
-        get_l10n_args("\n".$conf['expd_email_content']),
-      );
-
-      $subject = l10n('You have expiring photos');
-      $content = l10n_args($keyargs_content);
-
-      pwg_mail(
+      expd_send_user_mail(
         $email_of_user[$user_id],
-        array(
-          'subject' => $subject,
-          'content' => $content,
-          'content_format' => 'text/plain',
-        )
+        l10n('You have expiring photos'),
+        $mail_images,
+        l10n('These photo have reached their expiry date.')
       );
     }
 
