@@ -8,14 +8,26 @@ include_once(PHPWG_ROOT_PATH.'admin/include/tabsheet.class.php');
 
 define('EXPIRY_DATE_BASE_URL', get_root_url().'admin.php?page=plugin-expiry_date');
 
-// get current tab
-$page['tab'] = isset($_GET['tab']) ? $_GET['tab'] : $page['tab'] = 'config';
+$tabs = array(
+  'config' => l10n('Configuration'),
+  'history' => l10n('History'),
+);
+
+// get current tab, only among known tabs because it is used to include a file
+$page['tab'] = 'config';
+if (isset($_GET['tab']) and isset($tabs[ $_GET['tab'] ]))
+{
+  $page['tab'] = $_GET['tab'];
+}
 
 //tabsheet
 $tabsheet = new tabsheet();
 $tabsheet->set_id('expiry_date');
 
-$tabsheet->add('config', l10n('Configuration'), EXPIRY_DATE_ADMIN . '-config');
+foreach ($tabs as $tab_code => $tab_label)
+{
+  $tabsheet->add($tab_code, $tab_label, EXPIRY_DATE_ADMIN.'-'.$tab_code);
+}
 $tabsheet->select($page['tab']);
 $tabsheet->assign();
 

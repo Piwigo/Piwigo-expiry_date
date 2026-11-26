@@ -48,5 +48,9 @@ $lang['These photo have reached their expiry date.'] = 'Ces photos ont atteint l
 $lang['expires on'] = 'expire le';
 $lang['expired on'] = 'A expiré le';
 $lang['These photos will soon expire.'] = 'Ces images vont bientôt expirer';
+$lang['No notification sent yet'] = 'Aucune notification envoyée pour le moment';
+$lang['On the expiry date'] = 'Le jour de l\'expiration';
+$lang['Photo ID'] = 'ID de la photo';
+$lang['Pre-notification'] = 'Pré-notification';
 
 ?>

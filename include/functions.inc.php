@@ -15,6 +15,55 @@ function expd_add_notification_history($notifications)
 }
 
 /**
+ * Key identifying one email in the notification history: one recipient +
+ * one notification type + one sending run
+ *
+ * @param array $line row of EXPIRY_DATE_NOTIFICATIONS_TABLE
+ * @return string
+ */
+function expd_get_history_email_key($line)
+{
+  return implode('|', array($line['send_date'], (string)$line['email_uuid'], $line['type'], $line['user_id']));
+}
+
+/**
+ * Recipient type and moment of a notification type, for display
+ *
+ * @param string $type value of EXPIRY_DATE_NOTIFICATIONS_TABLE.type
+ * @return array (recipient type: 'user', 'admin' or null, recipient type
+ *   label, moment label), labels are translated
+ */
+function expd_get_history_notification_type($type)
+{
+  $recipient = null;
+  $when = $type;
+
+  if (preg_match('/^prenotification_(user|admin)_(\d+)$/', $type, $matches))
+  {
+    $recipient = $matches[1];
+    $when = l10n($matches[2].' days before expiry');
+  }
+  // "notification_admin" was used by old versions of the plugin
+  elseif (preg_match('/^(?:expiration_)?notification_(user|admin)$/', $type, $matches))
+  {
+    $recipient = $matches[1];
+    $when = l10n('On the expiry date');
+  }
+
+  $recipient_type = null;
+  if ('admin' == $recipient)
+  {
+    $recipient_type = l10n('Administrator notifications');
+  }
+  elseif ('user' == $recipient)
+  {
+    $recipient_type = l10n('User notifications');
+  }
+
+  return array($recipient, $recipient_type, $when);
+}
+
+/**
  * Code copied from empty_lounge
  */
 function expd_single_exec($token_name, $timeout = 60)

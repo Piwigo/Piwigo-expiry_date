@@ -95,3 +95,252 @@ legend{
   font-size: 90%;
   color: #777;
 }
+
+/* notification history tab, layout copied from admin pages "history" and
+   "user_activity" (colors come from admin themes) */
+#expd_history_page{
+  display:flex;
+  flex-direction:column;
+  margin:20px 30px;
+  text-align:left;
+}
+
+#expd_history_page .expd-no-result{
+  font-size:14px;
+  font-weight:bold;
+  color:#777;
+}
+
+#expd_history_page .expd-tab-title{
+  display:flex;
+  flex-direction:row;
+}
+
+#expd_history_page .expd-tab-title div{
+  font-size:1.1em;
+  font-weight:bold;
+  color:#9e9e9e;
+  margin-bottom:10px;
+  padding-bottom:5px;
+}
+
+#expd_history_page .expd-line{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  min-height:80px;
+  margin-bottom:10px;
+  box-shadow:0px 2px 4px #00000024;
+}
+
+#expd_history_page .expd-date-col,
+#expd_history_page .expd-notification-col,
+#expd_history_page .expd-user-col,
+#expd_history_page .expd-photos-col{
+  box-sizing:border-box;
+  padding-left:10px;
+  text-align:left;
+}
+
+#expd_history_page .expd-date-col{
+  width:230px;
+  flex-shrink:0;
+}
+
+#expd_history_page .expd-notification-col{
+  width:270px;
+  flex-shrink:0;
+}
+
+#expd_history_page .expd-user-col{
+  width:240px;
+  flex-shrink:0;
+}
+
+#expd_history_page .expd-photos-col{
+  flex-grow:1;
+  min-width:0;
+}
+
+#expd_history_page .expd-line .date-section,
+#expd_history_page .expd-line .type-section,
+#expd_history_page .expd-line .user-section{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  align-self:stretch;
+  margin:10px 0;
+}
+
+#expd_history_page .expd-line .detail-section{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  align-items:center;
+  padding-top:10px;
+  padding-bottom:5px;
+}
+
+#expd_history_page .expd-line-icon{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-shrink:0;
+  width:20px;
+  height:20px;
+  padding:10px;
+  margin-right:10px;
+  border-radius:50%;
+}
+
+#expd_history_page .expd-line-icon::before{
+  margin:0;
+  transform:scale(1.2);
+}
+
+#expd_history_page .expd-infos{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+#expd_history_page .expd-bold{
+  font-weight:bold;
+}
+
+#expd_history_page .expd-ellipsis{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding-right:10px;
+}
+
+#expd_history_page .expd-photo,
+#expd_history_page .expd-photo img{
+  display:block;
+  width:50px;
+  height:50px;
+  border-radius:5px;
+}
+
+#expd_history_page .expd-photo{
+  margin:0 5px 5px 0;
+}
+
+#expd_history_page .expd-photo-deleted{
+  box-sizing:border-box;
+  padding-top:16px;
+  font-size:0.85em;
+  text-align:center;
+  opacity:0.7;
+  cursor:default;
+}
+
+#expd_history_page .pagination-container{
+  margin-top:10px;
+}
+
+/* history filters: same HTML structure as the admin page "user_activity",
+   these rules are copied from the <style> of user_activity.tpl (other rules
+   and dark theme colors come from admin themes) */
+#expd_history_page .activity-header{
+  display:flex;
+  flex-direction:row;
+  width:100%;
+}
+
+#expd_history_page div:has(> .activity-header){
+  margin-bottom:38px;
+}
+
+#expd_history_page .activity-select span{
+  font-size:15px;
+  font-weight:bold;
+}
+
+#expd_history_page .user-selecter,
+#expd_history_page .action-selecter{
+  width:230px;
+  margin-top:10px;
+}
+
+#expd_history_page .user_activity_end_options{
+  margin-left:auto;
+  display:flex;
+}
+
+#expd_history_page .activity-more-filters{
+  margin-left:14px;
+  justify-content:center;
+  cursor:pointer;
+  padding:10px;
+  text-align:center;
+  font-weight:bold;
+  width:70px;
+}
+
+#expd_history_page .activity-more-filters.extend-padding{
+  padding-bottom:10px;
+}
+
+#expd_history_page .activity-more-filters,
+#expd_history_page .activity-more-filters-content{
+  background-color:#F3F3F3;
+}
+
+#expd_history_page .activity-more-filters-content{
+  display:flex;
+  position:relative;
+  flex-direction:row;
+  font-weight:normal;
+  padding:23px 0px 22px 24px;
+  width:auto;
+}
+
+#expd_history_page .activity-date-selecter{
+  display:block;
+  height:25.5px;
+  width:130px;
+  margin-top:10px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+#expd_history_page .selectize-control.single.user-selecter,
+#expd_history_page .selectize-control.single.action-selecter{
+  height:30px;
+}
+
+#expd_history_page .selectize-control.single .selectize-input{
+  height:30px;
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  justify-content:left;
+}
+
+#expd_history_page .selectize-input,
+#expd_history_page .selectize-dropdown{
+  text-align:left;
+}
+
+#expd_history_page .selectize-control.single .selectize-input input{
+  height:30px;
+}
+
+/* plugin specific: number input with the same height as date inputs */
+#expd_history_page input.activity-date-selecter[type=number]{
+  padding:0 0 0 5px;
+}
+
+/* plugin specific: reset link, aligned with the fields */
+#expd_history_page .expd-filters-reset{
+  align-self:flex-end;
+  height:auto;
+  padding-bottom:6px;
+  font-weight:bold;
+}
+
+#expd_history_page .expd-photo-filtered{
+  outline:3px solid #ffa646;
+}
