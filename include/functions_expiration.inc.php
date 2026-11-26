@@ -85,8 +85,13 @@ SELECT
 
 /**
  * Notify users of photo expiration
+ *
+ * @param array $images
+ * @param int[] $image_ids
+ * @param bool $add_link add a link to each photo in the gallery (only makes
+ *   sense if the photo was neither deleted nor archived)
  */
-function notify_users($images, $image_ids)
+function notify_users($images, $image_ids, $add_link=false)
 {
   global $conf, $user;
   
@@ -129,7 +134,7 @@ SELECT
 ;';
   $email_of_user = query2array($query, 'id', 'email');
 
-  if (count($email_of_user) < 0)
+  if (empty($email_of_user))
   {
     return;
   }
@@ -166,6 +171,7 @@ SELECT
     switch_lang_to($recipient_language);
 
     $image_info = "\n\n";
+    $nb_images_for_user = 0;
     foreach (array_keys($user_image_ids) as $user_image_id)
     {
       foreach ($images as $image)
@@ -174,8 +180,23 @@ SELECT
         {
           continue;
         }
-        $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expired on")." ".format_date($image["expiry_date"])."\n\n";
-         
+        $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expired on")." ".format_date($image["expiry_date"])."\n";
+        if ($add_link)
+        {
+          set_make_full_url();
+          $url_gallery = make_picture_url(
+            array(
+              'image_id' => $image['id'],
+              'image_file' => $image['file'],
+            )
+          );
+          unset_make_full_url();
+
+          $image_info .= ' '.$url_gallery."\n";
+        }
+        $image_info .= "\n";
+        $nb_images_for_user++;
+
         $notification_history[] = array(
           'type' => 'expiration_notification_user',
           'user_id' =>  $user_id,
@@ -188,7 +209,8 @@ SELECT
       }
     }
 
-    if (count($notification_history) > 0)
+    // $notification_history is shared by all users, check this user has photos
+    if ($nb_images_for_user > 0)
     {
       $keyargs_content = array(
         get_l10n_args("You have received this email because you previously downloaded these photos: %s", $image_info),

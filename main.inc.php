@@ -176,6 +176,9 @@ SELECT id, file, name, author, expiry_date
   // Action taken on expiring images
   list($dbnow) = pwg_db_fetch_row(pwg_query('SELECT NOW();'));
 
+  // will photos still be visible in the gallery once the action is applied?
+  $photos_still_reachable = false;
+
   //set email content to notify admins expiration action has taken place
   $subject = get_l10n_args("Expiry date, action has been taken");
   $keyargs_content = array(
@@ -322,15 +325,18 @@ SELECT
     //remove expiry date so action is not done again, add archive date
     $datas = array();
 
-    foreach ($image_ids as $image_id)
+    foreach ($images as $image)
     {
       $datas[] = array(
-        'id' => $image_id,
+        'id' => $image['id'],
         'expiry_date' => null,
         'expd_action_applied_on' => $dbnow,
         'expd_expired_on' => $image['expiry_date'],
         );
     }
+
+    // no action taken, photos are still in their albums: users can be given a link
+    $photos_still_reachable = true;
 
     mass_updates(
       IMAGES_TABLE,
@@ -359,7 +365,7 @@ SELECT
   
   if (isset($conf['expiry_date']['expd_notify']))
   {
-    notify_users($images, $image_ids);
+    notify_users($images, $image_ids, $photos_still_reachable);
   }
 }
 

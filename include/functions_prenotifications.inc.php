@@ -191,8 +191,8 @@ WHERE '.$conf['user_fields']['id'].' IN ('.implode(',',$user_ids).')
 ;';
 
   $email_of_user = query2array($query, 'id', 'email');
-      
-  if (count($email_of_user) < 0)
+
+  if (empty($email_of_user))
   {
     return;
   }
@@ -245,21 +245,32 @@ SELECT
     switch_lang_to($recipient_language);
 
     $image_info = "\n\n";
+    $nb_images_for_user = 0;
     foreach (array_keys($user_image_ids) as $user_image_id)
     {
-      if(in_array($user_image_id.'_'.$user_id,array_keys($notifications_sent)))
+      if (isset($notifications_sent[$user_image_id.'_'.$user_id]))
       {
         continue;
       }
-      $url_gallery = get_absolute_root_url().'picture.php?/'.$user_image_id;
       foreach ($images as $image)
       {
         if ($user_image_id != $image["id"])
         {
           continue;
         }
+
+        set_make_full_url();
+        $url_gallery = make_picture_url(
+          array(
+            'image_id' => $image['id'],
+            'image_file' => $image['file'],
+          )
+        );
+        unset_make_full_url();
+
         $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expires on")." ".format_date($image["expiry_date"])."\n ".$url_gallery."\n\n";
-         
+        $nb_images_for_user++;
+
         $notification_history[] = array(
           'type' => 'prenotification_user_'.$conf['expiry_date']['expd_notify_before_option'],
           'user_id' =>  $user_id,
@@ -271,7 +282,10 @@ SELECT
       }
     }
 
-    if (count($notification_history) > 0)
+    // $notification_history is shared by all users: without this per-user
+    // counter, a user whose photos were all already prenotified would receive
+    // an email with an empty list as soon as a previous user had photos
+    if ($nb_images_for_user > 0)
     {
       $keyargs_content = array(
         get_l10n_args("You have received this email because you previously downloaded these photos: %s", $image_info),
