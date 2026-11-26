@@ -88,14 +88,15 @@ SELECT
 
     $image_info .= '* '.$image["name"].' '.$image["author"].' ('.$image["file"]."), ".l10n("expires on")." ".format_date($image["expiry_date"])."\n ".$url_admin."\n\n";
 
-    foreach ($admin_ids as $admin_id)
+    // only admins with an email address get notified
+    foreach ($admin_emails as $admin_id => $admin_email)
     {
       $notification_history[] = array(
         'type' => 'prenotification_admin_'.$conf['expiry_date']['expd_notify_admin_before_option'],
         'user_id' =>  $admin_id,
         'image_id' => $image['id'],
         'send_date' => $dbnow,
-        'email_used' => $admin_emails[$admin_id],
+        'email_used' => $admin_email,
         'email_uuid' => $email_uuid,
       );
     }

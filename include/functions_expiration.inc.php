@@ -55,14 +55,15 @@ SELECT
 
   foreach ($images as $image_id => $image)
   {
-    foreach ($admin_ids as $admin_id)
+    // only admins with an email address get notified
+    foreach ($admin_emails as $admin_id => $admin_email)
     {
       $notification_history[] = array(
         'type' => 'expiration_notification_admin',
         'user_id' =>  $admin_id,
         'image_id' => $image['id'],
         'send_date' => $dbnow,
-        'email_used' => $admin_emails[$admin_id],
+        'email_used' => $admin_email,
         'email_uuid' => $email_uuid,
       );
     }
