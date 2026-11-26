@@ -7,7 +7,7 @@ include_once(PHPWG_ROOT_PATH.'admin/include/functions.php');
 /**
  * Send prenotifications to admins
  */
-function send_prenotifications_admin()
+function expd_send_prenotifications_admin()
 {
   global $conf;
 
@@ -117,7 +117,7 @@ SELECT
  * $user_email for notification history
  */
 
-function send_prenotifications_user()
+function expd_send_prenotifications_user()
 {
   global $conf;
 

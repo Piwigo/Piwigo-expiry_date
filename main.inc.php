@@ -123,14 +123,14 @@ SELECT id, file
   if (isset($conf['expiry_date']['expd_notify_admin']))
   {
     //Prenotify admins of expiration,
-    send_prenotifications_admin();
+    expd_send_prenotifications_admin();
   }
  
   //If notifications is set check if prentifications need to be sent
   if (isset($conf['expiry_date']['expd_notify']))
   {
     //Prenotify user of expiration
-    send_prenotifications_user();
+    expd_send_prenotifications_user();
   }      
 
   //ON EXPIRY//
@@ -339,12 +339,12 @@ SELECT
 
   if (isset($conf['expiry_date']['expd_notify']))
   {
-    notify_admins($images, $admin_mail_status, $admin_mail_add_link_and_thumbnail, $admin_mail_add_link_and_thumbnail);
+    expd_notify_admins($images, $admin_mail_status, $admin_mail_add_link_and_thumbnail, $admin_mail_add_link_and_thumbnail);
   }
   
   if (isset($conf['expiry_date']['expd_notify']))
   {
-    notify_users($images, $image_ids, $user_mail_add_link, $user_mail_add_thumbnail);
+    expd_notify_users($images, $image_ids, $user_mail_add_link, $user_mail_add_thumbnail);
   }
 }
 

@@ -14,7 +14,7 @@ include_once(EXPIRY_DATE_PATH.'include/functions.inc.php');
  * @param bool $add_thumbnail add a thumbnail of each photo (only makes sense
  *   if the photo file was not deleted)
  */
-function notify_admins($images, $status_keyargs, $add_link=false, $add_thumbnail=false)
+function expd_notify_admins($images, $status_keyargs, $add_link=false, $add_thumbnail=false)
 {
   global $conf;
 
@@ -108,7 +108,7 @@ SELECT
  * @param bool $add_thumbnail add a thumbnail of each photo (only makes sense
  *   if the photo file was not deleted)
  */
-function notify_users($images, $image_ids, $add_link=false, $add_thumbnail=false)
+function expd_notify_users($images, $image_ids, $add_link=false, $add_thumbnail=false)
 {
   global $conf, $user;
   
